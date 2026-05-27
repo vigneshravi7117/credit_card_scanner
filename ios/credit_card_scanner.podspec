@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'credit_card_scanner'
-  s.version          = '2.0.0'
+  s.version          = '2.0.1'
   s.summary          = 'Credit card scanner plugin'
   s.description      = 'A Flutter plugin for scanning credit cards'
   s.homepage         = 'https://github.com/vigneshravi7117/credit_card_scanner'
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.source_files     = 'Classes/**/*'
   s.dependency 'Flutter'
   s.dependency 'GoogleMLKit/TextRecognition', '~> 7.0'
-  s.platform         = :ios, '15.5'
+  s.platform         = :ios, '15.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   s.swift_version    = '5.0'
   s.static_framework = true
