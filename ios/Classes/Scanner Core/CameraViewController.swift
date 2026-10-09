@@ -145,9 +145,17 @@ class CameraViewController: UIViewController {
     }
     
     func refocus() {
+        // `device` is only set once camera access is granted and the capture session is set
+        // up, but the tap-to-focus view is added on viewWillAppear. A tap before then - or at
+        // all when access was denied - reached here with a nil `device!` and crashed
+        // (EXC_BREAKPOINT in captureTap:, Sentry ONEGOLD-NF).
+        guard let device = device, device.isFocusModeSupported(.autoFocus) else {
+            return
+        }
         do {
             try device.lockForConfiguration()
             device.focusMode = .autoFocus
+            device.unlockForConfiguration()
         } catch {
             print(error)
         }
@@ -323,8 +331,9 @@ class CameraViewController: UIViewController {
     
     public func stopScanning() {
         DispatchQueue.main.async {
-            self.device.unlockForConfiguration()
-            self.captureSession.stopRunning()
+            // refocus() releases its own configuration lock now, and both of these are still
+            // nil when the camera was never set up (access denied), so don't force them.
+            self.captureSession?.stopRunning()
             self.dismiss(animated: true, completion: nil)
         }
     }

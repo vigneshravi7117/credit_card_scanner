@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.1.1
+- iOS: fix a crash when the scanner screen is tapped before the camera is ready, or after camera access was denied (nil capture device in `refocus()` / `stopScanning()`).
+
 ## 1.0.5
 - Updated for Flutter 3
 
