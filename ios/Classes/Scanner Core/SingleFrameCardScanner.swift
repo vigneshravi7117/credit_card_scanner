@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MLKitTextRecognition
 
 class SingleFrameCardScanner {
     var cardScanOptions: CardScannerOptions
@@ -15,7 +14,7 @@ class SingleFrameCardScanner {
         self.cardScanOptions = cardScanOptions
     }
     
-    func scanSingleFrame(visionText: Text) -> CardDetails? {
+    func scanSingleFrame(visionText: RecognizedText) -> CardDetails? {
         guard let optionalCardNumberResult = CardNumberFilter(
             visionText: visionText,
             scannerOptions: cardScanOptions

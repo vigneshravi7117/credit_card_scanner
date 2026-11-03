@@ -6,15 +6,14 @@
 //
 
 import Foundation
-import MLKitTextRecognition
 
 class ScanFilterResult {
-    private var visionText: Text
+    private var visionText: RecognizedText
     private var textBlockIndex: Int
-    private var textBlock: TextBlock
+    private var textBlock: RecognizedTextBlock
     private var data: ScanResultData
     
-    init(visionText: Text, textBlockIndex: Int, textBlock: TextBlock, data: ScanResultData) {
+    init(visionText: RecognizedText, textBlockIndex: Int, textBlock: RecognizedTextBlock, data: ScanResultData) {
         self.visionText = visionText
         self.textBlockIndex = textBlockIndex
         self.textBlock = textBlock
@@ -39,12 +38,12 @@ enum CardElementType {
 }
 
 class CardNumberScanResult : ScanFilterResult {
-    var visionText: Text
+    var visionText: RecognizedText
     var textBlockIndex: Int
-    var textBlock: TextBlock
+    var textBlock: RecognizedTextBlock
     var cardNumber: String
     
-    init(visionText: Text, textBlockIndex: Int, textBlock: TextBlock, cardNumber: String){
+    init(visionText: RecognizedText, textBlockIndex: Int, textBlock: RecognizedTextBlock, cardNumber: String){
         self.visionText = visionText
         self.textBlockIndex = textBlockIndex
         self.textBlock = textBlock
@@ -61,12 +60,12 @@ class CardNumberScanResult : ScanFilterResult {
 }
 
 class ExpiryDateScanResult : ScanFilterResult {
-    var visionText: Text
+    var visionText: RecognizedText
     var textBlockIndex: Int
-    var textBlock: TextBlock
+    var textBlock: RecognizedTextBlock
     var expiryDate: String
     
-    init(visionText: Text, textBlockIndex: Int, textBlock: TextBlock, expiryDate: String) {
+    init(visionText: RecognizedText, textBlockIndex: Int, textBlock: RecognizedTextBlock, expiryDate: String) {
         self.visionText = visionText
         self.textBlockIndex = textBlockIndex
         self.textBlock = textBlock
@@ -77,12 +76,12 @@ class ExpiryDateScanResult : ScanFilterResult {
 }
 
 class CardHolderNameScanResult : ScanFilterResult {
-    var visionText: Text
+    var visionText: RecognizedText
     var textBlockIndex: Int
-    var textBlock: TextBlock
+    var textBlock: RecognizedTextBlock
     var cardHolderName: String
     
-    init(visionText: Text, textBlockIndex: Int, textBlock: TextBlock, cardHolderName: String){
+    init(visionText: RecognizedText, textBlockIndex: Int, textBlock: RecognizedTextBlock, cardHolderName: String){
         self.visionText = visionText
         self.textBlockIndex = textBlockIndex
         self.textBlock = textBlock

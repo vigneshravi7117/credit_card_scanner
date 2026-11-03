@@ -6,15 +6,14 @@
 //
 
 import Foundation
-import MLKitTextRecognition
 
 class CardNumberFilter: ScanFilter {
     private var cardNumberRegex: NSRegularExpression = try! NSRegularExpression(pattern: CardScannerRegexps.cardNumberRegex, options: [.anchorsMatchLines])
     
-    var visionText: Text
+    var visionText: RecognizedText
     var scannerOptions: CardScannerOptions
     
-    init(visionText: Text, scannerOptions: CardScannerOptions) {
+    init(visionText: RecognizedText, scannerOptions: CardScannerOptions) {
         self.visionText = visionText
         self.scannerOptions = scannerOptions
     }

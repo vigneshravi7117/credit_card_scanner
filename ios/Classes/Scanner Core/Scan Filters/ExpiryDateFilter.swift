@@ -6,10 +6,9 @@
 //
 
 import Foundation
-import MLKitTextRecognition
 
 class ExpiryDateFilter : ScanFilter {
-    var visionText: Text
+    var visionText: RecognizedText
     var scannerOptions: CardScannerOptions
     private var cardNumberScanResult: CardNumberScanResult
     
@@ -18,7 +17,7 @@ class ExpiryDateFilter : ScanFilter {
     var maxBlocksBelowCardNumberToSearchForExpiryDate = 4
     var expiryDateFormat = "MM/yy"
     
-    init(visionText: Text, scannerOptions: CardScannerOptions, cardNumberScanResult: CardNumberScanResult) {
+    init(visionText: RecognizedText, scannerOptions: CardScannerOptions, cardNumberScanResult: CardNumberScanResult) {
         self.visionText = visionText
         self.scannerOptions = scannerOptions
         self.cardNumberScanResult = cardNumberScanResult

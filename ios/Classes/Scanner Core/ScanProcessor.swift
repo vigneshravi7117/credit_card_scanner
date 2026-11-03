@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MLKitTextRecognition
 
 public protocol ScanProcessorDelegate {
     func scanProcessor(_ scanProcessor: ScanProcessor, didFinishScanning card: CardDetails)
@@ -51,7 +50,7 @@ public class ScanProcessor {
 
 // MARK:- CameraDelegate
 extension ScanProcessor: CameraDelegate {
-    func camera(_ camera: CameraViewController, didScan scanResult: Text) {
+    func camera(_ camera: CameraViewController, didScan scanResult: RecognizedText) {
         guard let cardDetails = singleFrameCardScanner.scanSingleFrame(visionText: scanResult) else {
             return
         }
