@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.1
+- iOS: the close button is back. Its image had stopped being bundled (1.0.2), so it was invisible, and it sat under the Dynamic Island. The close and flash buttons now use SF Symbols inside the safe area.
+- iOS: closing the scanner (close button or `cardScannerTimeOut`) now returns `null` from `CardScanner.scanCard`, as on Android. Before, the call never returned.
+- iOS: the camera keeps the card in focus. It focused once, before the camera had started, and then stayed locked. It now uses continuous autofocus on the card frame, tap to focus, and, on iPhones whose main lens can't focus that close (Pro models), the multi-lens camera that switches to the ultra-wide for close-ups like the Camera app.
+- iOS: the scanner opens from the top-most view controller, the timeout closes only the scanner, and results reach Flutter on the main thread.
+
 ## 2.2.0
 - iOS: read card text with Apple's Vision framework instead of Google ML Kit. ML Kit has no arm64 simulator build, so apps using this plugin could not run on Apple Silicon simulators (Xcode 27 removed the Rosetta ones).
 
