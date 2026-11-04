@@ -7,47 +7,57 @@ public class SwiftCardScannerPlugin: NSObject, FlutterPlugin {
         let instance = SwiftCardScannerPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
-    
+
     var result: FlutterResult?
-    
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         if (call.method == "scan_card") {
-            let scanProcessor: ScanProcessor = ScanProcessor(withOptions: CardScannerOptions(from: call.arguments as? [String: String]))
-            
+            let options = CardScannerOptions(from: call.arguments as? [String: String])
+            let scanProcessor: ScanProcessor = ScanProcessor(withOptions: options)
+
             scanProcessor.scanProcessorDelegate = self
-            var secondsRemaining = CardScannerOptions(from: call.arguments as? [String: String]).cardScannerTimeOut
-            
+
+            // An earlier call that never got an answer gets no card.
+            self.result?(nil)
+            self.result = result
+
             DispatchQueue.main.async {
                 scanProcessor.startScanning()
             }
-            
-            if secondsRemaining != 0 {
-                Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (Timer) in
-                    if secondsRemaining <= 0 {
-                        Timer.invalidate()
-                        DispatchQueue.main.async {
-                            UIApplication.shared.keyWindow?.rootViewController?.dismiss(
-                                animated: true,
-                                completion: nil
-                            )
-                        }
-                    } else {
-                        secondsRemaining -= 1
-                    }
+
+            if options.cardScannerTimeOut > 0 {
+                // Closes only this scanner; it used to dismiss whatever the root view
+                // controller presented, even after the scan had finished. Weak: once the
+                // scanner is gone there is nothing to close.
+                Timer.scheduledTimer(
+                    withTimeInterval: TimeInterval(options.cardScannerTimeOut),
+                    repeats: false
+                ) { [weak scanProcessor] _ in
+                    scanProcessor?.cancel()
                 }
             }
-            
-            self.result = result
         } else {
             result(FlutterMethodNotImplemented)
+        }
+    }
+
+    /// Answers the pending call once, on the main thread: a scan finishes on the video queue.
+    private func reply(_ value: Any?) {
+        DispatchQueue.main.async {
+            guard let result = self.result else { return }
+            self.result = nil
+            result(value)
         }
     }
 }
 
 extension SwiftCardScannerPlugin: ScanProcessorDelegate {
     public func scanProcessor(_ scanProcessor: ScanProcessor, didFinishScanning card: CardDetails) {
-        if let result = self.result {
-            result(card.dictionary)
-        }
+        reply(card.dictionary)
+    }
+
+    /// Closed without a card: `CardScanner.scanCard` returns null, as on Android.
+    public func scanProcessorDidCancel(_ scanProcessor: ScanProcessor) {
+        reply(nil)
     }
 }
