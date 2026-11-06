@@ -6,9 +6,12 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.WindowInsets
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -58,8 +61,10 @@ class CardScannerCameraActivity : AppCompatActivity() {
 
     val vto = scannerLayout.viewTreeObserver
     backButton.setOnClickListener {
+      setResult(Activity.RESULT_CANCELED)
       finish()
     }
+    keepBelowStatusBar(backButton)
     vto.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
       override fun onGlobalLayout() {
         scannerLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -83,6 +88,31 @@ class CardScannerCameraActivity : AppCompatActivity() {
     } else {
       ActivityCompat.requestPermissions(
               this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+    }
+  }
+
+  /**
+   * Apps targeting Android 15+ draw this screen under the status bar (edge-to-edge
+   * is enforced there), and the status bar takes every tap in its area. Without
+   * this the back button sat inside it: visible, but it couldn't be tapped.
+   * When the screen starts below the status bar the inset is 0 and nothing moves.
+   */
+  private fun keepBelowStatusBar(view: View) {
+    val params = view.layoutParams as ViewGroup.MarginLayoutParams
+    val baseTopMargin = params.topMargin
+    view.setOnApplyWindowInsetsListener { v, insets ->
+      val top = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        insets.getInsets(WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout()).top
+      } else {
+        @Suppress("DEPRECATION")
+        insets.systemWindowInsetTop
+      }
+      val lp = v.layoutParams as ViewGroup.MarginLayoutParams
+      if (lp.topMargin != baseTopMargin + top) {
+        lp.topMargin = baseTopMargin + top
+        v.layoutParams = lp
+      }
+      insets
     }
   }
 

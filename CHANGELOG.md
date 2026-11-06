@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.2.2
+- Android: the back arrow closes the scanner again. Apps targeting Android 15+ draw the screen under the status bar, and the arrow sat inside it, where the status bar takes every tap. It now stays below the status bar and has a 48dp touch target. Closing returns `null` from `CardScanner.scanCard`, as the system back does.
+
 ## 2.2.1
 - iOS: the close button is back. Its image had stopped being bundled (1.0.2), so it was invisible, and it sat under the Dynamic Island. The close and flash buttons now use SF Symbols inside the safe area.
 - iOS: closing the scanner (close button or `cardScannerTimeOut`) now returns `null` from `CardScanner.scanCard`, as on Android. Before, the call never returned.
