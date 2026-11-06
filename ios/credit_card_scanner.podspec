@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'credit_card_scanner'
-  s.version          = '2.2.1'
+  s.version          = '2.2.2'
   s.summary          = 'Credit card scanner plugin'
   s.description      = 'A Flutter plugin for scanning credit cards'
   s.homepage         = 'https://github.com/vigneshravi7117/credit_card_scanner'

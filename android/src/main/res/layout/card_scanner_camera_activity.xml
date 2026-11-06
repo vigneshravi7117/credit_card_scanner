@@ -19,14 +19,18 @@
             android:layout_weight="1"
             android:background="@color/semitransparent">
 
-            <Button
+            <!-- 48dp touch target; the arrow sits where the old 20dp button drew it.
+                 CardScannerCameraActivity adds the status bar height to the top margin. -->
+            <ImageButton
                 android:id="@+id/backButton"
-                android:layout_marginStart="28dp"
-                android:layout_marginTop="28dp"
-                android:layout_width="20dp"
-                android:background="@drawable/ic_back_arrow"
-                android:layout_height="17dp"
-                android:textSize="24sp"/>
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="12dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/card_scanner_close"
+                android:scaleType="center"
+                android:src="@drawable/ic_back_arrow" />
 
 
         </RelativeLayout>
